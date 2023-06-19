@@ -5,6 +5,17 @@ abstract class ValueObject<T> {
     return this._value;
   }
 
+  static validate<ValueType>(
+    AnyValueObject: new (_value: ValueType) => ValueObject<ValueType>,
+    value: ValueType
+  ) {
+    try {
+      new AnyValueObject(value);
+    } catch (error) {
+      return error;
+    }
+  }
+
   toJSON() {
     return JSON.parse(JSON.stringify(this.value));
   }

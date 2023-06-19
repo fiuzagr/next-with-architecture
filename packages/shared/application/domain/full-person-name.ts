@@ -17,7 +17,7 @@ class FullPersonName extends ValueObject<string> {
   }
 
   public static sanitize(value: string) {
-    return value.replaceAll(/^\s|\s$/g, "").replaceAll(/\s/g, " ");
+    return value.replaceAll(/(^\s|\s$)/g, "").replaceAll(/\s/g, " ");
   }
 }
 

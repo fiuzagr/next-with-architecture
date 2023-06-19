@@ -4,6 +4,7 @@ import {
   Email,
   Entity,
   FullPersonName,
+  ValueObject,
 } from "@packages/shared/application/domain";
 
 interface LeadProps {
@@ -23,12 +24,14 @@ class Lead extends Entity<LeadProps, LeadJSON> {
   constructor(props: LeadProps, id?: string | null) {
     super(props, id);
 
-    if (id === null || id === undefined) {
+    if (!id) {
       this.addEvent(new LeadCreatedEvent({ lead: this.toJSON() }));
     }
   }
 
   static fromJSON(json: LeadJSON) {
+    Lead.validate(json);
+
     return new Lead(
       {
         fullName: new FullPersonName(json.fullName),
@@ -37,6 +40,18 @@ class Lead extends Entity<LeadProps, LeadJSON> {
       },
       json.id || null
     );
+  }
+
+  static validate(json: LeadJSON) {
+    const errors = [
+      ValueObject.validate<string>(FullPersonName, json.fullName),
+      ValueObject.validate<string>(Cpf, json.cpf),
+      ValueObject.validate<string>(Email, json.email),
+    ].filter((value) => value);
+
+    if (errors.length) throw errors;
+
+    return true;
   }
 }
 
