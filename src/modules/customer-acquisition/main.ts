@@ -7,7 +7,10 @@ import {
   LeadRepository,
   UpdateLeadUseCase,
 } from "@packages/customer-acquisition";
-import { LeadCreatedEvent } from "@packages/customer-acquisition/application/domain";
+import {
+  LeadCreatedEvent,
+  LeadUpdatedEvent,
+} from "@packages/customer-acquisition/application/domain";
 import {
   ConsoleLoggerAdapter,
   EventDispatcherAdapter,
@@ -54,7 +57,10 @@ const updateLeadUseCase = new UpdateLeadUseCase(
   eventDispatcher
 );
 
-eventDispatcher.register(LeadCreatedEvent.name, loggerEventHandler);
+eventDispatcher.register(
+  [LeadCreatedEvent.name, LeadUpdatedEvent.name],
+  loggerEventHandler
+);
 
 export {
   createLeadUseCase,

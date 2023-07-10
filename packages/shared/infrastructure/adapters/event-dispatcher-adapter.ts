@@ -10,7 +10,7 @@ class EventDispatcherAdapter implements EventDispatcherPort {
   private eventHandlers = new Map<string, EventHandlerPort[]>();
 
   getHandlers(eventName: string) {
-    return this.eventHandlers.get(eventName) || [];
+    return this.eventHandlers.get(eventName) ?? [];
   }
 
   getAllHandlers() {
@@ -37,21 +37,25 @@ class EventDispatcherAdapter implements EventDispatcherPort {
     });
   }
 
-  register(eventName: string, eventHandler: EventHandlerPort) {
-    const handlers = this.eventHandlers.get(eventName) || [];
+  register(eventNames: string[], eventHandler: EventHandlerPort) {
+    eventNames.forEach((eventName) => {
+      const handlers = this.eventHandlers.get(eventName) ?? [];
 
-    const hasSomeHandler = handlers.some((handler) => handler === eventHandler);
-    if (!hasSomeHandler) {
-      this.eventHandlers.set(eventName, [...handlers, eventHandler]);
-    }
+      const hasSomeHandler = handlers.some(
+        (handler) => handler === eventHandler
+      );
+      if (!hasSomeHandler) {
+        this.eventHandlers.set(eventName, [...handlers, eventHandler]);
+      }
 
-    LoggerProvider.getInstance().debug(
-      EventDispatcherAdapter.name,
-      "register",
-      eventName,
-      eventHandler,
-      hasSomeHandler ? "already registered" : "registered"
-    );
+      LoggerProvider.getInstance().debug(
+        EventDispatcherAdapter.name,
+        "register",
+        eventName,
+        eventHandler,
+        hasSomeHandler ? "already registered" : "registered"
+      );
+    });
   }
 }
 
