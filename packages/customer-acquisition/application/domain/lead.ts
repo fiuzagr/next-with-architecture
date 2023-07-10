@@ -1,4 +1,7 @@
-import { LeadCreatedEvent } from "@packages/customer-acquisition/application/domain/events";
+import {
+  LeadCreatedEvent,
+  LeadUpdatedEvent,
+} from "@packages/customer-acquisition/application/domain/events";
 import {
   Cpf,
   Email,
@@ -52,6 +55,18 @@ class Lead extends Entity<LeadProps, LeadJSON> {
     if (errors.length) throw errors;
 
     return true;
+  }
+
+  public update(json: LeadJSON) {
+    Lead.validate(json);
+
+    this.props = {
+      fullName: new FullPersonName(json.fullName),
+      cpf: new Cpf(json.cpf),
+      email: new Email(json.email),
+    };
+
+    this.addEvent(new LeadUpdatedEvent({ lead: this.toJSON() }));
   }
 }
 

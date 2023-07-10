@@ -1,6 +1,6 @@
 import { useHomeController } from "@/modules/customer-acquisition";
-import { CreateLeadDto, LeadDto } from "@packages/customer-acquisition";
-import { FormEvent } from "react";
+import { LeadDto } from "@packages/customer-acquisition";
+import { FormEvent, useEffect, useState } from "react";
 
 interface ListLeadsProps {
   leads: {
@@ -11,9 +11,10 @@ interface ListLeadsProps {
     hasSomething: boolean;
   }[];
   onSearch?: (query?: string) => Promise<LeadDto[] | undefined>;
+  onEditClick: (id: string) => void;
 }
 
-const ListLeadsView = ({ leads, onSearch }: ListLeadsProps) => {
+const ListLeadsView = ({ leads, onSearch, onEditClick }: ListLeadsProps) => {
   const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -37,6 +38,7 @@ const ListLeadsView = ({ leads, onSearch }: ListLeadsProps) => {
             <th>CPF</th>
             <th>E-mail</th>
             <th>Has something</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +48,9 @@ const ListLeadsView = ({ leads, onSearch }: ListLeadsProps) => {
               <td>{cpf}</td>
               <td>{email}</td>
               <td>{hasSomething ? "Yes" : null}</td>
+              <td>
+                <button onClick={() => onEditClick(id)}>Edit</button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -54,59 +59,115 @@ const ListLeadsView = ({ leads, onSearch }: ListLeadsProps) => {
   );
 };
 
-interface CreateLeadViewProps {
-  onSubmit?: (data: CreateLeadDto) => Promise<void>;
+interface CreateOrUpdateLeadViewProps {
+  onSubmit?: (data: LeadDto) => Promise<void>;
   refreshLeads?: (query?: string) => Promise<LeadDto[] | undefined>;
+  lead?: {
+    id: string;
+    fullName: string;
+    cpf: string;
+    email: string;
+  };
 }
 
-const CreateLeadView = ({ onSubmit, refreshLeads }: CreateLeadViewProps) => {
+const CreateOrUpdateLeadView = ({
+  onSubmit,
+  refreshLeads,
+  lead,
+}: CreateOrUpdateLeadViewProps) => {
+  const [form, setForm] = useState<Partial<LeadDto>>(lead || {});
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(
-      formData.entries()
-    ) as unknown as CreateLeadDto;
-    onSubmit && (await onSubmit(data));
+    onSubmit && (await onSubmit(form as LeadDto));
     refreshLeads && (await refreshLeads());
+    setForm({});
   };
+
+  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+    const { name, value } = event.currentTarget;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  const editing = !!form.id;
+
+  useEffect(() => {
+    if (lead) {
+      setForm(lead);
+    }
+  }, [lead]);
 
   return (
     <div>
-      <h1>Create Lead</h1>
+      {editing ? <h1>Update Lead</h1> : <h1>Create Lead</h1>}
+
       <form onSubmit={handleSubmit}>
+        {editing ? <input type={"hidden"} name={"id"} value={form.id} /> : null}
+
         <label>
           Full name
-          <input name={"fullName"} />
+          <input
+            name={"fullName"}
+            value={form.fullName || ""}
+            onChange={handleInputChange}
+          />
         </label>
         <label>
           CPF
-          <input name={"cpf"} />
+          <input
+            name={"cpf"}
+            value={form.cpf || ""}
+            onChange={handleInputChange}
+          />
         </label>
         <label>
           E-mail
-          <input name={"email"} />
+          <input
+            name={"email"}
+            value={form.email || ""}
+            onChange={handleInputChange}
+          />
         </label>
-        <button type={"submit"}>Criar</button>
+        <button type={"submit"}>{editing ? "Editar" : "Criar"}</button>
       </form>
     </div>
   );
 };
 
 export default function HomePage() {
-  const [{ leads, error, loading }, { handleCreateLead, handleFilterLeads }] =
-    useHomeController();
+  const [leadId, setLeadId] = useState<string | undefined>(undefined);
+  const [
+    { leads, error, loading },
+    { handleCreateOrUpdateLead, handleFilterLeads },
+  ] = useHomeController();
 
   if (loading) return <div>Loading...</div>;
+
+  let lead;
+  if (leads && leadId) {
+    lead = leads.find((lead) => lead.id === leadId);
+  }
 
   return (
     <>
       {error ? <div>{error}</div> : null}
-      <CreateLeadView
-        onSubmit={handleCreateLead}
+      <CreateOrUpdateLeadView
+        onSubmit={async (data) => {
+          handleCreateOrUpdateLead && (await handleCreateOrUpdateLead(data));
+          setLeadId(undefined);
+        }}
         refreshLeads={handleFilterLeads}
+        lead={lead}
       />
       {leads ? (
-        <ListLeadsView leads={leads} onSearch={handleFilterLeads} />
+        <ListLeadsView
+          leads={leads}
+          onSearch={handleFilterLeads}
+          onEditClick={(id: string) => setLeadId(id)}
+        />
       ) : null}
     </>
   );

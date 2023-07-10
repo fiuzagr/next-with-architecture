@@ -4,10 +4,7 @@ import EventsManager from "@packages/shared/application/events-manager";
 abstract class Entity<Props, JSONProps> extends EventsManager {
   private readonly _id: Id;
 
-  protected constructor(
-    private readonly _props: Props,
-    id: string | null | undefined
-  ) {
+  protected constructor(private _props: Props, id: string | null | undefined) {
     super();
 
     this._id = new Id(id || Id.generate());
@@ -19,6 +16,10 @@ abstract class Entity<Props, JSONProps> extends EventsManager {
 
   get props(): Props {
     return this._props;
+  }
+
+  set props(props: Props) {
+    this._props = props;
   }
 
   toJSON(): JSONProps {

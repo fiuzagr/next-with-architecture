@@ -5,6 +5,7 @@ import {
   FindLeadByIdUseCase,
   IndexedDbLeadDataSource,
   LeadRepository,
+  UpdateLeadUseCase,
 } from "@packages/customer-acquisition";
 import { LeadCreatedEvent } from "@packages/customer-acquisition/application/domain";
 import {
@@ -48,7 +49,16 @@ const createLeadUseCase = new CreateLeadUseCase(
   leadRepository,
   eventDispatcher
 );
+const updateLeadUseCase = new UpdateLeadUseCase(
+  leadRepository,
+  eventDispatcher
+);
 
 eventDispatcher.register(LeadCreatedEvent.name, loggerEventHandler);
 
-export { createLeadUseCase, findLeadByIdUseCase, filterLeadsUseCase };
+export {
+  createLeadUseCase,
+  findLeadByIdUseCase,
+  filterLeadsUseCase,
+  updateLeadUseCase,
+};

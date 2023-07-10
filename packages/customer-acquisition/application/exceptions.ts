@@ -6,3 +6,10 @@ export class CreateLeadError extends GenericError {
     this.name = "CreateLeadError";
   }
 }
+
+export class UpdateLeadError extends GenericError {
+  public constructor(error?: string | Error, ...args: any[]) {
+    super(error, ...args);
+    this.name = "UpdateLeadError";
+  }
+}

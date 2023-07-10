@@ -2,8 +2,14 @@ import {
   useCreateLead,
   useFilterLeads,
   useListLeadsPresenter,
+  useUpdateLead,
 } from "@/modules/customer-acquisition";
-import { FilterDto } from "@packages/customer-acquisition";
+import {
+  CreateLeadDto,
+  FilterDto,
+  LeadDto,
+  UpdateLeadDto,
+} from "@packages/customer-acquisition";
 import { useState } from "react";
 
 const useHomeController = () => {
@@ -22,12 +28,25 @@ const useHomeController = () => {
     { error: createLeadError, loading: createLeadLoading },
   ] = useCreateLead();
 
-  const error = leadError || createLeadError;
-  const loading = leadLoading || createLeadLoading;
+  const [
+    handleUpdateLead,
+    { error: updateLeadError, loading: updateLeadLoading },
+  ] = useUpdateLead();
+
+  const error = leadError || createLeadError || updateLeadError;
+  const loading = leadLoading || createLeadLoading || updateLeadLoading;
 
   const handleFilterLeads = async (query?: string) => {
     setFilter((prevFilter) => ({ ...prevFilter, query }));
     return await _handleFilterLeads();
+  };
+
+  const handleCreateOrUpdateLead = async (lead: LeadDto) => {
+    if (lead.id) {
+      await handleUpdateLead(lead as UpdateLeadDto);
+    } else {
+      await handleCreateLead(lead as CreateLeadDto);
+    }
   };
 
   return [
@@ -37,7 +56,7 @@ const useHomeController = () => {
       loading,
     },
     {
-      handleCreateLead,
+      handleCreateOrUpdateLead,
       handleFilterLeads,
     },
   ];
