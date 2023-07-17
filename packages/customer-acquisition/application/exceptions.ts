@@ -13,3 +13,10 @@ export class UpdateLeadError extends GenericError {
     this.name = "UpdateLeadError";
   }
 }
+
+export class CreateCustomerError extends GenericError {
+  public constructor(error?: string | Error, ...args: any[]) {
+    super(error, ...args);
+    this.name = "CreateCustomerError";
+  }
+}

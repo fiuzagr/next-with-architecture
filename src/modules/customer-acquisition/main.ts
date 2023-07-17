@@ -1,23 +1,29 @@
 import {
+  CreateCustomerByLeadEventHandlerAdapter,
+  CreateCustomerUseCase,
   CreateLeadUseCase,
+  CustomerDto,
+  CustomerRepository,
   FakeLeadDataSource,
   FilterLeadsUseCase,
   FindLeadByIdUseCase,
-  IndexedDbLeadDataSource,
+  IndexedDbDataSource,
+  LeadDto,
   LeadRepository,
   UpdateLeadUseCase,
 } from "@packages/customer-acquisition";
 import {
+  CustomerCreatedEvent,
   LeadCreatedEvent,
   LeadUpdatedEvent,
 } from "@packages/customer-acquisition/application/domain";
 import {
   ConsoleLoggerAdapter,
   EventDispatcherAdapter,
-  FakeIdentifierAdapter,
   IdentifierProvider,
   LoggerEventHandlerAdapter,
   LoggerProvider,
+  UuidIdentifierAdapter,
 } from "@packages/shared";
 import {
   consoleLoggerSettings,
@@ -26,7 +32,8 @@ import {
 import * as localforage from "localforage";
 
 const logger = new ConsoleLoggerAdapter(consoleLoggerSettings);
-const identifier = new FakeIdentifierAdapter();
+//const identifier = new FakeIdentifierAdapter();
+const identifier = new UuidIdentifierAdapter();
 
 const loggerProvider = new LoggerProvider(logger);
 const identifierProvider = new IdentifierProvider(identifier);
@@ -43,7 +50,7 @@ const leadStorage = isBrowser
     })
   : null;
 const leadDataSource = leadStorage
-  ? new IndexedDbLeadDataSource(leadStorage)
+  ? new IndexedDbDataSource<LeadDto>(leadStorage)
   : new FakeLeadDataSource();
 const leadRepository = new LeadRepository(leadDataSource);
 const findLeadByIdUseCase = new FindLeadByIdUseCase(leadDataSource);
@@ -57,10 +64,27 @@ const updateLeadUseCase = new UpdateLeadUseCase(
   eventDispatcher
 );
 
+const customerStorage = localforage.createInstance({
+  name: "customer",
+});
+const customerDataSource = new IndexedDbDataSource<CustomerDto>(
+  customerStorage
+);
+const customerRepository = new CustomerRepository(customerDataSource);
+const createCustomerUseCase = new CreateCustomerUseCase(
+  customerRepository,
+  eventDispatcher
+);
+const createCustomerEventHandler = new CreateCustomerByLeadEventHandlerAdapter(
+  createCustomerUseCase,
+  logger
+);
+
 eventDispatcher.register(
-  [LeadCreatedEvent.name, LeadUpdatedEvent.name],
+  [LeadCreatedEvent.name, LeadUpdatedEvent.name, CustomerCreatedEvent.name],
   loggerEventHandler
 );
+eventDispatcher.register([LeadCreatedEvent.name], createCustomerEventHandler);
 
 export {
   createLeadUseCase,

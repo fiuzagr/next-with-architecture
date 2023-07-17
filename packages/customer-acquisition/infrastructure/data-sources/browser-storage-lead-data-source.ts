@@ -1,10 +1,10 @@
 import { FilterDto } from "@packages/customer-acquisition";
 import {
-  LeadDataSourcePort,
+  DataSourcePort,
   LeadDto,
 } from "@packages/customer-acquisition/application";
 
-class BrowserStorageLeadDataSource implements LeadDataSourcePort {
+class BrowserStorageLeadDataSource implements DataSourcePort {
   static key = "Lead:";
 
   constructor(private storage: Storage) {}

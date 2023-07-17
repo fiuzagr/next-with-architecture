@@ -1,8 +1,8 @@
-import { LeadDataSourcePort, LeadDto } from "@packages/customer-acquisition";
+import { DataSourcePort, LeadDto } from "@packages/customer-acquisition";
 import { LoggerProvider, UseCasePort } from "@packages/shared";
 
 class FindLeadByIdUseCase implements UseCasePort<string, LeadDto> {
-  constructor(private dataSource: LeadDataSourcePort) {}
+  constructor(private dataSource: DataSourcePort) {}
 
   async execute(id: string) {
     const lead = await this.dataSource.find(id);

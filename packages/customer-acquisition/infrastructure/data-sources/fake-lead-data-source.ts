@@ -1,10 +1,10 @@
 import { FilterDto } from "@packages/customer-acquisition";
 import {
-  LeadDataSourcePort,
+  DataSourcePort,
   LeadDto,
 } from "@packages/customer-acquisition/application";
 
-class FakeLeadDataSource implements LeadDataSourcePort {
+class FakeLeadDataSource implements DataSourcePort<LeadDto> {
   async save(lead: LeadDto) {
     console.debug("Saved lead", lead);
   }

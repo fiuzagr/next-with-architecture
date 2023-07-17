@@ -7,7 +7,7 @@ abstract class Entity<Props, JSONProps> extends EventsManager {
   protected constructor(private _props: Props, id: string | null | undefined) {
     super();
 
-    this._id = new Id(id || Id.generate());
+    this._id = new Id(id ?? Id.generate());
   }
 
   get id(): Id {
