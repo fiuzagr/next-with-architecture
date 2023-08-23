@@ -1,1 +1,1 @@
-export { default as useListLeadsPresenter } from "./use-list-leads-presenter";
+export * from "./use-list-leads-presenter";

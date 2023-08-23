@@ -1,4 +1,8 @@
-class Mock {
+export class ValueObject {
+  get value() {
+    return "mocked";
+  }
+
   public static isValid() {
     return true;
   }
@@ -10,10 +14,4 @@ class Mock {
   toJSON() {
     return "mocked";
   }
-
-  get value() {
-    return "mocked";
-  }
 }
-
-export default Mock;

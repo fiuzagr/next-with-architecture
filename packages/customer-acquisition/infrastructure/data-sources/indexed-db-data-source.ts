@@ -6,15 +6,17 @@ interface DbData {
   fullName: string;
 }
 
-class IndexedDbDataSource<T extends DbData> implements DataSourcePort<T> {
-  constructor(private storage: LocalForage) {}
+export class IndexedDbDataSource<T extends DbData>
+  implements DataSourcePort<T>
+{
+  constructor(private readonly storage: LocalForage) {}
 
   async save(data: T) {
     if (!data.id) {
       throw new Error("Id is required");
     }
 
-    await this.storage.setItem(data.id as string, data);
+    await this.storage.setItem(data.id, data);
   }
 
   async find(id: string): Promise<T> {

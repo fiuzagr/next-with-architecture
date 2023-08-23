@@ -5,24 +5,26 @@ import {
   UseCasePort,
 } from "@packages/shared";
 import { Event } from "@packages/shared/application/domain";
-import { CreateCustomerDto } from "@packages/customer-acquisition";
+import { CreateCustomerRequest } from "@packages/customer-acquisition";
 
-class CreateCustomerByLeadEventHandlerAdapter implements EventHandlerPort {
+export class CreateCustomerByLeadEventHandlerAdapter
+  implements EventHandlerPort
+{
   constructor(
-    private useCase: UseCasePort<CreateCustomerDto, void>,
-    private logger: LoggerPort
+    private readonly useCase: UseCasePort<CreateCustomerRequest, void>,
+    private readonly logger: LoggerPort
   ) {}
 
   handle(event: Event<EventDataDto>) {
     const customer = {
-      ...event.data.lead,
-      id: undefined,
-      leadId: event.data.lead.id,
+      data: {
+        ...event.data.lead,
+        id: undefined,
+        leadId: event.data.lead.id,
+      },
     };
     this.useCase.execute(customer).catch((error) => {
       this.logger.error(error);
     });
   }
 }
-
-export default CreateCustomerByLeadEventHandlerAdapter;

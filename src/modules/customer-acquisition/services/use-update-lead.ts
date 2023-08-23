@@ -1,11 +1,9 @@
 import { updateLeadUseCase } from "@/modules/customer-acquisition/main";
 import { useMutation } from "@/modules/shared";
-import { UpdateLeadDto } from "@packages/customer-acquisition";
+import { UpdateLeadRequest } from "@packages/customer-acquisition";
 
-const useUpdateLead = () => {
-  return useMutation<UpdateLeadDto, void>(
+export const useUpdateLead = () => {
+  return useMutation<UpdateLeadRequest, void>(
     updateLeadUseCase.execute.bind(updateLeadUseCase)
   );
 };
-
-export default useUpdateLead;

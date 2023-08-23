@@ -1,6 +1,6 @@
 import { useHomeController } from "@/modules/customer-acquisition";
-import { LeadDto } from "@packages/customer-acquisition";
-import { FormEvent, useEffect, useState } from "react";
+import { FilterLeadsResponse, LeadDTO } from "@packages/customer-acquisition";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 
 interface ListLeadsProps {
   leads: {
@@ -10,7 +10,7 @@ interface ListLeadsProps {
     email: string;
     hasSomething: boolean;
   }[];
-  onSearch?: (query?: string) => Promise<LeadDto[] | undefined>;
+  onSearch?: (query?: string) => Promise<FilterLeadsResponse | undefined>;
   onEditClick: (id: string) => void;
 }
 
@@ -60,8 +60,8 @@ const ListLeadsView = ({ leads, onSearch, onEditClick }: ListLeadsProps) => {
 };
 
 interface CreateOrUpdateLeadViewProps {
-  onSubmit?: (data: LeadDto) => Promise<void>;
-  refreshLeads?: (query?: string) => Promise<LeadDto[] | undefined>;
+  onSubmit?: (data: LeadDTO) => Promise<void>;
+  refreshLeads?: (query?: string) => Promise<FilterLeadsResponse | undefined>;
   lead?: {
     id: string;
     fullName: string;
@@ -75,11 +75,11 @@ const CreateOrUpdateLeadView = ({
   refreshLeads,
   lead,
 }: CreateOrUpdateLeadViewProps) => {
-  const [form, setForm] = useState<Partial<LeadDto>>(lead || {});
+  const [form, setForm] = useState<Partial<LeadDTO>>(lead ?? {});
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit && (await onSubmit(form as LeadDto));
+    onSubmit && (await onSubmit(form as LeadDTO));
     refreshLeads && (await refreshLeads());
     setForm({});
   };
@@ -111,7 +111,7 @@ const CreateOrUpdateLeadView = ({
           Full name
           <input
             name={"fullName"}
-            value={form.fullName || ""}
+            value={form.fullName ?? ""}
             onChange={handleInputChange}
           />
         </label>
@@ -119,7 +119,7 @@ const CreateOrUpdateLeadView = ({
           CPF
           <input
             name={"cpf"}
-            value={form.cpf || ""}
+            value={form.cpf ?? ""}
             onChange={handleInputChange}
           />
         </label>
@@ -127,7 +127,7 @@ const CreateOrUpdateLeadView = ({
           E-mail
           <input
             name={"email"}
-            value={form.email || ""}
+            value={form.email ?? ""}
             onChange={handleInputChange}
           />
         </label>
@@ -144,29 +144,35 @@ export default function HomePage() {
     { handleCreateOrUpdateLead, handleFilterLeads },
   ] = useHomeController();
 
-  if (loading) return <div>Loading...</div>;
+  const handleSubmit = useCallback(
+    async (data: LeadDTO) => {
+      handleCreateOrUpdateLead && (await handleCreateOrUpdateLead(data));
+      setLeadId(undefined);
+    },
+    [handleCreateOrUpdateLead]
+  );
+  const handleEdit = useCallback((id: string) => setLeadId(id), []);
 
-  let lead;
+  let foundLead;
   if (leads && leadId) {
-    lead = leads.find((lead) => lead.id === leadId);
+    foundLead = leads.find((lead) => lead.id === leadId);
   }
 
-  return (
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <>
       {error ? <div>{error}</div> : null}
       <CreateOrUpdateLeadView
-        onSubmit={async (data) => {
-          handleCreateOrUpdateLead && (await handleCreateOrUpdateLead(data));
-          setLeadId(undefined);
-        }}
+        onSubmit={handleSubmit}
         refreshLeads={handleFilterLeads}
-        lead={lead}
+        lead={foundLead}
       />
       {leads ? (
         <ListLeadsView
           leads={leads}
           onSearch={handleFilterLeads}
-          onEditClick={(id: string) => setLeadId(id)}
+          onEditClick={handleEdit}
         />
       ) : null}
     </>

@@ -8,7 +8,7 @@ export enum LogLevel {
 
 export type LogLevelStrings = keyof typeof LogLevel;
 
-interface LoggerPort {
+export interface LoggerPort {
   info(...args: any[]): void;
 
   debug(...args: any[]): void;
@@ -17,5 +17,3 @@ interface LoggerPort {
 
   error(...args: any[]): void;
 }
-
-export default LoggerPort;

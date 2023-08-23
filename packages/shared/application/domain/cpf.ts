@@ -1,7 +1,7 @@
 import { InvalidCpfError } from "@packages/shared";
-import ValueObject from "@packages/shared/application/domain/value-object";
+import { ValueObject } from "@packages/shared/application/domain/value-object";
 
-class Cpf extends ValueObject<string> {
+export class Cpf extends ValueObject<string> {
   constructor(value: string) {
     const sanitizedValue = Cpf.sanitize(value);
 
@@ -13,12 +13,10 @@ class Cpf extends ValueObject<string> {
   }
 
   public static isValid(value: string) {
-    return /^[0-9]{11}$/.test(value);
+    return /^\d{11}$/.test(value);
   }
 
   public static sanitize(value: string) {
-    return value.replaceAll(/[^0-9]/g, "");
+    return value.replaceAll(/\D/g, "");
   }
 }
-
-export default Cpf;

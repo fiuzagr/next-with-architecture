@@ -1,15 +1,14 @@
-import { FilterDto } from "@packages/customer-acquisition";
-import {
-  DataSourcePort,
-  LeadDto,
-} from "@packages/customer-acquisition/application";
+import { FilterDto, LeadDTO } from "@packages/customer-acquisition";
+import { DataSourcePort } from "@packages/customer-acquisition/application";
 
-class FakeLeadDataSource implements DataSourcePort<LeadDto> {
-  async save(lead: LeadDto) {
+const timeoutDelay = 1000;
+
+export class FakeLeadDataSource implements DataSourcePort<LeadDTO> {
+  async save(lead: LeadDTO) {
     console.debug("Saved lead", lead);
   }
 
-  async find(id: string): Promise<LeadDto> {
+  async find(id: string): Promise<LeadDTO> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -18,11 +17,11 @@ class FakeLeadDataSource implements DataSourcePort<LeadDto> {
           cpf: "01234567800",
           email: "email@test.com",
         });
-      }, 1000);
+      }, timeoutDelay);
     });
   }
 
-  async filter(filter: FilterDto): Promise<LeadDto[]> {
+  async filter(_filter: FilterDto): Promise<LeadDTO[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -39,7 +38,7 @@ class FakeLeadDataSource implements DataSourcePort<LeadDto> {
             email: "email@another.test.com",
           },
         ]);
-      }, 1000);
+      }, timeoutDelay);
     });
   }
 }

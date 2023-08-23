@@ -1,3 +1,3 @@
-export { default as Provider } from "./provider";
-export { default as IdentifierProvider } from "./identifier-provider";
-export { default as LoggerProvider } from "./logger-provider";
+export * from "./provider";
+export * from "./identifier-provider";
+export * from "./logger-provider";

@@ -1,7 +1,7 @@
-export { default as Event } from "./event";
-export { default as Entity } from "./entity";
-export { default as Cpf } from "./cpf";
-export { default as Email } from "./email";
-export { default as FullPersonName } from "./full-person-name";
-export { default as Id } from "./id";
-export { default as ValueObject } from "./value-object";
+export * from "./event";
+export * from "./entity";
+export * from "./cpf";
+export * from "./email";
+export * from "./full-person-name";
+export * from "./id";
+export * from "./value-object";

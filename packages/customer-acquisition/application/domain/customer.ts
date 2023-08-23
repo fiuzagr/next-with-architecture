@@ -1,3 +1,4 @@
+import { CustomerDTO } from "@packages/customer-acquisition";
 import { CustomerCreatedEvent } from "@packages/customer-acquisition/application/domain/events";
 import {
   Cpf,
@@ -15,15 +16,7 @@ interface CustomerProps {
   leadId: Id;
 }
 
-interface CustomerJSON {
-  id?: string;
-  fullName: string;
-  cpf: string;
-  email: string;
-  leadId: string;
-}
-
-class Customer extends Entity<CustomerProps, CustomerJSON> {
+export class Customer extends Entity<CustomerProps, CustomerDTO> {
   constructor(props: CustomerProps, id?: string | null) {
     super(props, id);
 
@@ -32,31 +25,31 @@ class Customer extends Entity<CustomerProps, CustomerJSON> {
     }
   }
 
-  static fromJSON(json: CustomerJSON) {
-    Customer.validate(json);
+  static fromDTO(dto: CustomerDTO) {
+    Customer.validate(dto);
 
     return new Customer(
       {
-        fullName: new FullPersonName(json.fullName),
-        cpf: new Cpf(json.cpf),
-        email: new Email(json.email),
-        leadId: new Id(json.leadId),
+        fullName: new FullPersonName(dto.fullName),
+        cpf: new Cpf(dto.cpf),
+        email: new Email(dto.email),
+        leadId: new Id(dto.leadId),
       },
-      json.id ?? null
+      dto.id ?? null
     );
   }
 
-  static validate(json: CustomerJSON) {
+  static validate(dto: CustomerDTO) {
     const errors = [
-      ValueObject.validate<string>(FullPersonName, json.fullName),
-      ValueObject.validate<string>(Cpf, json.cpf),
-      ValueObject.validate<string>(Email, json.email),
+      ValueObject.validate<string>(FullPersonName, dto.fullName),
+      ValueObject.validate<string>(Cpf, dto.cpf),
+      ValueObject.validate<string>(Email, dto.email),
     ].filter((value) => value);
 
-    if (errors.length) throw errors;
+    if (errors.length) {
+      throw errors;
+    }
 
     return true;
   }
 }
-
-export default Customer;

@@ -1,3 +1,3 @@
-export { default as LeadCreatedEvent } from "./lead-created-event";
-export { default as LeadUpdatedEvent } from "./lead-updated-event";
-export { default as CustomerCreatedEvent } from "./customer-created-event";
+export * from "./lead-created-event";
+export * from "./lead-updated-event";
+export * from "./customer-created-event";

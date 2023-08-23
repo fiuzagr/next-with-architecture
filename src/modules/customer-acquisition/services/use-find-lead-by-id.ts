@@ -1,9 +1,12 @@
 import { findLeadByIdUseCase } from "@/modules/customer-acquisition/main";
 import { useQuery } from "@/modules/shared";
-import { LeadDto } from "@packages/customer-acquisition";
+import {
+  FindLeadByIdRequest,
+  FindLeadByIdResponse,
+} from "@packages/customer-acquisition";
 
-const useFindLeadById = (id: string) => {
-  return useQuery<string, LeadDto>(() => findLeadByIdUseCase.execute(id));
+export const useFindLeadById = (id: string) => {
+  return useQuery<FindLeadByIdRequest, FindLeadByIdResponse>(() =>
+    findLeadByIdUseCase.execute({ data: { id } })
+  );
 };
-
-export default useFindLeadById;

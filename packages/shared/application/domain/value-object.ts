@@ -1,5 +1,5 @@
-abstract class ValueObject<T> {
-  protected constructor(private _value: T) {}
+export abstract class ValueObject<T> {
+  protected constructor(private readonly _value: T) {}
 
   get value() {
     return this._value;
@@ -8,11 +8,12 @@ abstract class ValueObject<T> {
   static validate<ValueType>(
     AnyValueObject: new (_value: ValueType) => ValueObject<ValueType>,
     value: ValueType
-  ) {
+  ): Error | undefined {
     try {
       new AnyValueObject(value);
+      return;
     } catch (error) {
-      return error;
+      return error as Error;
     }
   }
 
@@ -20,5 +21,3 @@ abstract class ValueObject<T> {
     return JSON.parse(JSON.stringify(this.value));
   }
 }
-
-export default ValueObject;

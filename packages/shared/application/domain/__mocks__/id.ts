@@ -1,9 +1,7 @@
-import Mock from "./value-object";
+import { ValueObject } from "./value-object";
 
-class IdMock extends Mock {
+export class Id extends ValueObject {
   public static generate() {
     return "generated-id";
   }
 }
-
-export default IdMock;

@@ -1,23 +1,37 @@
 import {
   DataSourcePort,
   FilterDto,
-  LeadDto,
+  LeadDTO,
 } from "@packages/customer-acquisition";
 import { LoggerProvider, UseCasePort } from "@packages/shared";
 
-class FilterLeadsUseCase implements UseCasePort<FilterDto, LeadDto[]> {
-  constructor(private dataSource: DataSourcePort) {}
+export interface FilterLeadsRequest {
+  data: FilterDto;
+}
 
-  async execute(filter: FilterDto) {
-    const leads = await this.dataSource.filter(filter);
+export interface FilterLeadsResponse {
+  data: {
+    leads: LeadDTO[];
+  };
+}
+
+export class FilterLeadsUseCase
+  implements UseCasePort<FilterLeadsRequest, FilterLeadsResponse>
+{
+  constructor(private readonly dataSource: DataSourcePort<LeadDTO>) {}
+
+  async execute(request: FilterLeadsRequest) {
+    const leads = await this.dataSource.filter(request.data);
 
     LoggerProvider.getInstance().debug(FilterLeadsUseCase.name, {
-      filter,
+      request,
       leads,
     });
 
-    return leads;
+    return {
+      data: {
+        leads,
+      },
+    };
   }
 }
-
-export default FilterLeadsUseCase;

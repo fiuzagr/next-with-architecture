@@ -1,7 +1,7 @@
-import Id from "@packages/shared/application/domain/id";
-import EventsManager from "@packages/shared/application/events-manager";
+import { Id } from "@packages/shared/application/domain/id";
+import { EventsManager } from "@packages/shared/application/events-manager";
 
-abstract class Entity<Props, JSONProps> extends EventsManager {
+export abstract class Entity<Props, JSONProps> extends EventsManager {
   private readonly _id: Id;
 
   protected constructor(private _props: Props, id: string | null | undefined) {
@@ -31,5 +31,3 @@ abstract class Entity<Props, JSONProps> extends EventsManager {
     };
   }
 }
-
-export default Entity;

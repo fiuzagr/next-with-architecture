@@ -1,5 +1,5 @@
-abstract class Provider<InstancePort> {
-  private static instances = new Map<string, any>();
+export abstract class Provider<InstancePort> {
+  private static readonly instances = new Map<string, any>();
 
   constructor(instance: InstancePort) {
     if (!instance) {
@@ -23,5 +23,3 @@ abstract class Provider<InstancePort> {
     return instance;
   }
 }
-
-export default Provider;

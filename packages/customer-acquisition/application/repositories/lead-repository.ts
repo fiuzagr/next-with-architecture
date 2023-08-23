@@ -1,12 +1,12 @@
 import {
   DataSourcePort,
-  LeadDto,
+  LeadDTO,
   LeadRepositoryPort,
 } from "@packages/customer-acquisition";
 import { Lead } from "@packages/customer-acquisition/application/domain";
 
-class LeadRepository implements LeadRepositoryPort {
-  constructor(private dataSource: DataSourcePort<LeadDto>) {}
+export class LeadRepository implements LeadRepositoryPort {
+  constructor(private readonly dataSource: DataSourcePort<LeadDTO>) {}
 
   async save(lead: Lead) {
     await this.dataSource.save(lead.toJSON());
@@ -14,8 +14,6 @@ class LeadRepository implements LeadRepositoryPort {
 
   async find(id: string) {
     const leadDto = await this.dataSource.find(id);
-    return Lead.fromJSON(leadDto);
+    return Lead.fromDTO(leadDto);
   }
 }
-
-export default LeadRepository;

@@ -1,5 +1,4 @@
 import {
-  CreateLeadDto,
   CreateLeadError,
   LeadRepositoryPort,
 } from "@packages/customer-acquisition";
@@ -10,21 +9,29 @@ import {
   UseCasePort,
 } from "@packages/shared";
 
-class CreateLeadUseCase implements UseCasePort<CreateLeadDto, void> {
+export interface CreateLeadRequest {
+  data: {
+    fullName: string;
+    cpf: string;
+    email: string;
+  };
+}
+
+export class CreateLeadUseCase implements UseCasePort<CreateLeadRequest, void> {
   constructor(
-    private repository: LeadRepositoryPort,
-    private eventDispatcher: EventDispatcherPort
+    private readonly repository: LeadRepositoryPort,
+    private readonly eventDispatcher: EventDispatcherPort
   ) {}
 
-  async execute(leadDto: CreateLeadDto) {
+  async execute(request: CreateLeadRequest) {
     try {
-      const lead = Lead.fromJSON(leadDto);
+      const lead = Lead.fromDTO(request.data);
       await this.repository.save(lead);
 
       this.eventDispatcher.notify([lead]);
 
       LoggerProvider.getInstance().debug(CreateLeadUseCase.name, {
-        leadDto,
+        request,
         lead,
       });
     } catch (error) {
@@ -32,5 +39,3 @@ class CreateLeadUseCase implements UseCasePort<CreateLeadDto, void> {
     }
   }
 }
-
-export default CreateLeadUseCase;

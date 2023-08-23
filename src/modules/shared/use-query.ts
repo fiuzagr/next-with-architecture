@@ -4,15 +4,15 @@ import { useCallback, useEffect, useState } from "react";
 type QueryHandler<Output> = () => Promise<Output>;
 
 type QueryHookResult<Output> = [
-  () => Promise<Output | undefined>,
   {
     error?: string;
     data?: Output;
     loading: boolean;
-  }
+  },
+  () => Promise<Output | undefined>
 ];
 
-const useQuery = <Input, Output>(
+export const useQuery = <Input, Output>(
   handler: QueryHandler<Output>,
   { lazy }: { lazy?: boolean } = { lazy: false }
 ): QueryHookResult<Output> => {
@@ -21,18 +21,18 @@ const useQuery = <Input, Output>(
   const [loading, setLoading] = useState<boolean>(true);
 
   const query = useCallback(async (): Promise<Output | undefined> => {
-    let data = undefined;
+    let queryData = undefined;
 
     try {
-      data = await handler();
-      setData(data);
+      queryData = await handler();
+      setData(queryData);
       setError(undefined);
-    } catch (error) {
-      console.error(error);
+    } catch (queryError) {
+      console.error(queryError);
 
       const errorMessage =
-        error instanceof GenericError
-          ? error.toString()
+        queryError instanceof GenericError
+          ? queryError.toString()
           : new UnknownError().toString();
 
       setError(errorMessage);
@@ -40,21 +40,21 @@ const useQuery = <Input, Output>(
 
     setLoading(false);
 
-    return data;
+    return queryData;
   }, [handler]);
 
   useEffect(() => {
-    if (!lazy) query();
+    if (!lazy) {
+      query();
+    }
   }, [lazy, query]);
 
   return [
-    query,
     {
       error,
       data,
       loading,
     },
+    query,
   ];
 };
-
-export default useQuery;

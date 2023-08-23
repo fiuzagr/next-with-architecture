@@ -1,11 +1,7 @@
-import { LeadDto } from "@packages/customer-acquisition";
+import { LeadDTO } from "@packages/customer-acquisition";
+import { cpfFormatter } from "@/modules/shared";
 
-// TODO move to another file
-const cpfFormatter = (cpf: string) => {
-  return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
-};
-
-const useListLeadsPresenter = (leads: LeadDto[] | undefined) => {
+export const useListLeadsPresenter = (leads: LeadDTO[] | undefined) => {
   return leads
     ? leads.map((lead) => ({
         id: lead.id as string,
@@ -16,5 +12,3 @@ const useListLeadsPresenter = (leads: LeadDto[] | undefined) => {
       }))
     : [];
 };
-
-export default useListLeadsPresenter;

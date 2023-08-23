@@ -1,3 +1,4 @@
+import { LeadDTO } from "@packages/customer-acquisition";
 import {
   LeadCreatedEvent,
   LeadUpdatedEvent,
@@ -16,14 +17,7 @@ interface LeadProps {
   email: Email;
 }
 
-interface LeadJSON {
-  id?: string;
-  fullName: string;
-  cpf: string;
-  email: string;
-}
-
-class Lead extends Entity<LeadProps, LeadJSON> {
+export class Lead extends Entity<LeadProps, LeadDTO> {
   constructor(props: LeadProps, id?: string | null) {
     super(props, id);
 
@@ -32,42 +26,42 @@ class Lead extends Entity<LeadProps, LeadJSON> {
     }
   }
 
-  static fromJSON(json: LeadJSON) {
-    Lead.validate(json);
+  static fromDTO(dto: LeadDTO) {
+    Lead.validate(dto);
 
     return new Lead(
       {
-        fullName: new FullPersonName(json.fullName),
-        cpf: new Cpf(json.cpf),
-        email: new Email(json.email),
+        fullName: new FullPersonName(dto.fullName),
+        cpf: new Cpf(dto.cpf),
+        email: new Email(dto.email),
       },
-      json.id || null
+      dto.id ?? null
     );
   }
 
-  static validate(json: LeadJSON) {
+  static validate(dto: LeadDTO) {
     const errors = [
-      ValueObject.validate<string>(FullPersonName, json.fullName),
-      ValueObject.validate<string>(Cpf, json.cpf),
-      ValueObject.validate<string>(Email, json.email),
+      ValueObject.validate<string>(FullPersonName, dto.fullName),
+      ValueObject.validate<string>(Cpf, dto.cpf),
+      ValueObject.validate<string>(Email, dto.email),
     ].filter((value) => value);
 
-    if (errors.length) throw errors;
+    if (errors.length) {
+      throw errors;
+    }
 
     return true;
   }
 
-  public update(json: LeadJSON) {
-    Lead.validate(json);
+  public update(dto: LeadDTO) {
+    Lead.validate(dto);
 
     this.props = {
-      fullName: new FullPersonName(json.fullName),
-      cpf: new Cpf(json.cpf),
-      email: new Email(json.email),
+      fullName: new FullPersonName(dto.fullName),
+      cpf: new Cpf(dto.cpf),
+      email: new Email(dto.email),
     };
 
     this.addEvent(new LeadUpdatedEvent({ lead: this.toJSON() }));
   }
 }
-
-export default Lead;

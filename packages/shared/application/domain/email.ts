@@ -1,7 +1,7 @@
 import { InvalidEmailError } from "@packages/shared";
-import ValueObject from "@packages/shared/application/domain/value-object";
+import { ValueObject } from "@packages/shared/application/domain/value-object";
 
-class Email extends ValueObject<string> {
+export class Email extends ValueObject<string> {
   constructor(value: string) {
     const sanitizedValue = Email.sanitize(value);
 
@@ -13,12 +13,10 @@ class Email extends ValueObject<string> {
   }
 
   public static isValid(value: string) {
-    return /^[-+._\w]{2,}@\w{2,}(\.\w{2,})+$/.test(value);
+    return /^[-+.\w]{2,}@\w{2,}(\.\w{2,})+$/.test(value);
   }
 
   public static sanitize(value: string) {
     return value.replaceAll(/\s/g, "");
   }
 }
-
-export default Email;

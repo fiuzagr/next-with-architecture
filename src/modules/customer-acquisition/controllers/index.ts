@@ -1,1 +1,1 @@
-export { default as useHomeController } from "./use-home-controller";
+export * from "./use-home-controller";

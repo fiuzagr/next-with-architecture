@@ -1,10 +1,8 @@
 import { Event } from "@packages/shared/application/domain";
-import { CustomerDto } from "@packages/customer-acquisition";
+import { CustomerDTO } from "@packages/customer-acquisition";
 
 interface EventData {
-  customer: CustomerDto;
+  customer: CustomerDTO;
 }
 
-class CustomerCreatedEvent extends Event<EventData> {}
-
-export default CustomerCreatedEvent;
+export class CustomerCreatedEvent extends Event<EventData> {}

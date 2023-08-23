@@ -3,14 +3,14 @@ import { useCallback, useState } from "react";
 type MutationHandler<Input, Output> = (input: Input) => Promise<Output>;
 
 type MutationHookResult<Input, Output> = [
-  (input: Input) => Promise<Output | void>,
   {
     error?: string;
     loading: boolean;
-  }
+  },
+  (input: Input) => Promise<Output | void>
 ];
 
-const useMutation = <Input, Output>(
+export const useMutation = <Input, Output>(
   handler: MutationHandler<Input, Output>
 ): MutationHookResult<Input, Output> => {
   const [error, setError] = useState<string>();
@@ -25,9 +25,9 @@ const useMutation = <Input, Output>(
       try {
         mutateData = await handler(input);
         setError(undefined);
-      } catch (error) {
-        console.error(error);
-        setError((error as Error).message);
+      } catch (mutationError) {
+        console.error(mutationError);
+        setError((mutationError as Error).message);
       }
 
       setLoading(false);
@@ -38,12 +38,10 @@ const useMutation = <Input, Output>(
   );
 
   return [
-    mutate,
     {
       error,
       loading,
     },
+    mutate,
   ];
 };
-
-export default useMutation;

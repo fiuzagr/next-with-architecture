@@ -1,3 +1,3 @@
-import Mock from "./value-object";
+import { ValueObject } from "./value-object";
 
-export default Mock;
+export const FullPersonName = ValueObject;

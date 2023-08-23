@@ -1,9 +1,11 @@
 import { IdentifierPort } from "@packages/shared";
 
-const randomLastUuidPart = () =>
-  Math.floor(Math.random() * 100000000000) + 100000000000;
+const randomLastUuidPart = () => {
+  const randomRange = 100000000000;
+  return Math.floor(Math.random() * randomRange) + randomRange;
+};
 
-class FakeIdentifierAdapter implements IdentifierPort {
+export class FakeIdentifierAdapter implements IdentifierPort {
   generate(): string {
     return "7d4e8097-abd5-4e7d-919f-" + randomLastUuidPart();
   }
@@ -12,5 +14,3 @@ class FakeIdentifierAdapter implements IdentifierPort {
     return id.includes("7d4e8097-abd5-4e7d-919f-");
   }
 }
-
-export default FakeIdentifierAdapter;

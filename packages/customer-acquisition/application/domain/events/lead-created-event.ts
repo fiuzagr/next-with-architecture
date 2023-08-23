@@ -1,10 +1,8 @@
-import { LeadDto } from "@packages/customer-acquisition";
+import { LeadDTO } from "@packages/customer-acquisition";
 import { Event } from "@packages/shared/application/domain";
 
 interface EventData {
-  lead: LeadDto;
+  lead: LeadDTO;
 }
 
-class LeadCreatedEvent extends Event<EventData> {}
-
-export default LeadCreatedEvent;
+export class LeadCreatedEvent extends Event<EventData> {}

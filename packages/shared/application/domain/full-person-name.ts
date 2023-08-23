@@ -1,7 +1,7 @@
 import { InvalidFullPersonNameError } from "@packages/shared";
-import ValueObject from "@packages/shared/application/domain/value-object";
+import { ValueObject } from "@packages/shared/application/domain/value-object";
 
-class FullPersonName extends ValueObject<string> {
+export class FullPersonName extends ValueObject<string> {
   constructor(value: string) {
     const sanitizedValue = FullPersonName.sanitize(value);
 
@@ -20,5 +20,3 @@ class FullPersonName extends ValueObject<string> {
     return value.replaceAll(/(^\s|\s$)/g, "").replaceAll(/\s/g, " ");
   }
 }
-
-export default FullPersonName;

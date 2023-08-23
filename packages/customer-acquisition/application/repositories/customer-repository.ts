@@ -1,16 +1,14 @@
 import { Customer } from "@packages/customer-acquisition/application/domain";
 import {
-  CustomerDto,
+  CustomerDTO,
   CustomerRepositoryPort,
   DataSourcePort,
 } from "@packages/customer-acquisition";
 
-class CustomerRepository implements CustomerRepositoryPort {
-  constructor(private dataSource: DataSourcePort<CustomerDto>) {}
+export class CustomerRepository implements CustomerRepositoryPort {
+  constructor(private readonly dataSource: DataSourcePort<CustomerDTO>) {}
 
   async save(customer: Customer) {
     await this.dataSource.save(customer.toJSON());
   }
 }
-
-export default CustomerRepository;

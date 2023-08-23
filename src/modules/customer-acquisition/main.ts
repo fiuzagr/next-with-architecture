@@ -2,13 +2,13 @@ import {
   CreateCustomerByLeadEventHandlerAdapter,
   CreateCustomerUseCase,
   CreateLeadUseCase,
-  CustomerDto,
+  CustomerDTO,
   CustomerRepository,
   FakeLeadDataSource,
   FilterLeadsUseCase,
   FindLeadByIdUseCase,
   IndexedDbDataSource,
-  LeadDto,
+  LeadDTO,
   LeadRepository,
   UpdateLeadUseCase,
 } from "@packages/customer-acquisition";
@@ -50,7 +50,7 @@ const leadStorage = isBrowser
     })
   : null;
 const leadDataSource = leadStorage
-  ? new IndexedDbDataSource<LeadDto>(leadStorage)
+  ? new IndexedDbDataSource<LeadDTO>(leadStorage)
   : new FakeLeadDataSource();
 const leadRepository = new LeadRepository(leadDataSource);
 const findLeadByIdUseCase = new FindLeadByIdUseCase(leadDataSource);
@@ -67,7 +67,7 @@ const updateLeadUseCase = new UpdateLeadUseCase(
 const customerStorage = localforage.createInstance({
   name: "customer",
 });
-const customerDataSource = new IndexedDbDataSource<CustomerDto>(
+const customerDataSource = new IndexedDbDataSource<CustomerDTO>(
   customerStorage
 );
 const customerRepository = new CustomerRepository(customerDataSource);

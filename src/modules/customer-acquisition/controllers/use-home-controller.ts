@@ -5,53 +5,57 @@ import {
   useUpdateLead,
 } from "@/modules/customer-acquisition";
 import {
-  CreateLeadDto,
-  FilterDto,
-  LeadDto,
-  UpdateLeadDto,
+  CreateLeadRequest,
+  FilterLeadsRequest,
+  LeadDTO,
+  UpdateLeadRequest,
 } from "@packages/customer-acquisition";
 import { useState } from "react";
 
-const useHomeController = () => {
-  const [filter, setFilter] = useState<FilterDto>({
-    query: undefined,
-    offset: 0,
-    limit: 1000,
+export const useHomeController = () => {
+  const [filter, setFilter] = useState<FilterLeadsRequest>({
+    data: {
+      query: undefined,
+      offset: 0,
+      limit: 1000,
+    },
   });
+
   const [
+    { data: responseFilterLeads, error: leadError, loading: leadLoading },
     _handleFilterLeads,
-    { data: leads, error: leadError, loading: leadLoading },
   ] = useFilterLeads(filter);
 
   const [
-    handleCreateLead,
     { error: createLeadError, loading: createLeadLoading },
+    handleCreateLead,
   ] = useCreateLead();
 
   const [
-    handleUpdateLead,
     { error: updateLeadError, loading: updateLeadLoading },
+    handleUpdateLead,
   ] = useUpdateLead();
-
-  const error = leadError || createLeadError || updateLeadError;
-  const loading = leadLoading || createLeadLoading || updateLeadLoading;
 
   const handleFilterLeads = async (query?: string) => {
     setFilter((prevFilter) => ({ ...prevFilter, query }));
     return await _handleFilterLeads();
   };
 
-  const handleCreateOrUpdateLead = async (lead: LeadDto) => {
+  const handleCreateOrUpdateLead = async (lead: LeadDTO) => {
     if (lead.id) {
-      await handleUpdateLead(lead as UpdateLeadDto);
+      await handleUpdateLead({ data: lead } as UpdateLeadRequest);
     } else {
-      await handleCreateLead(lead as CreateLeadDto);
+      await handleCreateLead({ data: lead } as CreateLeadRequest);
     }
   };
 
+  const error = leadError ?? createLeadError ?? updateLeadError;
+  const loading = leadLoading || createLeadLoading || updateLeadLoading;
+  const leads = useListLeadsPresenter(responseFilterLeads?.data?.leads);
+
   return [
     {
-      leads: useListLeadsPresenter(leads),
+      leads,
       error,
       loading,
     },
@@ -61,5 +65,3 @@ const useHomeController = () => {
     },
   ];
 };
-
-export default useHomeController;

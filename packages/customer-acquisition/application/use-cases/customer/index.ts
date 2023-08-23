@@ -1,1 +1,1 @@
-export { default as CreateCustomerUseCase } from "./create-customer-use-case";
+export * from "./create-customer-use-case";

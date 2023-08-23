@@ -1,5 +1,4 @@
 import {
-  CreateCustomerDto,
   CreateCustomerError,
   CustomerRepositoryPort,
 } from "@packages/customer-acquisition";
@@ -10,16 +9,27 @@ import {
   UseCasePort,
 } from "@packages/shared";
 
-class CreateCustomerUseCase implements UseCasePort<CreateCustomerDto, void> {
+export interface CreateCustomerRequest {
+  data: {
+    fullName: string;
+    cpf: string;
+    email: string;
+    leadId: string;
+  };
+}
+
+export class CreateCustomerUseCase
+  implements UseCasePort<CreateCustomerRequest, void>
+{
   constructor(
-    private repository: CustomerRepositoryPort,
-    private eventDispatcher: EventDispatcherPort
+    private readonly repository: CustomerRepositoryPort,
+    private readonly eventDispatcher: EventDispatcherPort
   ) {}
 
-  async execute(customerDto: CreateCustomerDto) {
+  async execute(request: CreateCustomerRequest) {
     try {
-      const customer = Customer.fromJSON({
-        ...customerDto,
+      const customer = Customer.fromDTO({
+        ...request.data,
         id: undefined,
       });
       await this.repository.save(customer);
@@ -27,7 +37,7 @@ class CreateCustomerUseCase implements UseCasePort<CreateCustomerDto, void> {
       this.eventDispatcher.notify([customer]);
 
       LoggerProvider.getInstance().debug(CreateCustomerUseCase.name, {
-        customerDto,
+        request,
         customer,
       });
     } catch (error) {
@@ -35,5 +45,3 @@ class CreateCustomerUseCase implements UseCasePort<CreateCustomerDto, void> {
     }
   }
 }
-
-export default CreateCustomerUseCase;

@@ -14,15 +14,13 @@ const defaultSettings: Settings = {
   logLevel: "info",
 };
 
-class LoggerEventHandlerAdapter implements EventHandlerPort {
+export class LoggerEventHandlerAdapter implements EventHandlerPort {
   constructor(
-    private logger: LoggerPort,
-    private settings: Settings = defaultSettings
+    private readonly logger: LoggerPort,
+    private readonly settings: Settings = defaultSettings
   ) {}
 
   handle(event: Event<EventDataDto>) {
     this.logger[this.settings.logLevel](event);
   }
 }
-
-export default LoggerEventHandlerAdapter;

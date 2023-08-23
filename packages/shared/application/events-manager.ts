@@ -1,6 +1,6 @@
-import Event from "@packages/shared/application/domain/event";
+import { Event } from "@packages/shared/application/domain/event";
 
-abstract class EventsManager {
+export abstract class EventsManager {
   private _events: Event[] = [];
 
   get events(): Event[] {
@@ -15,5 +15,3 @@ abstract class EventsManager {
     this._events = [];
   }
 }
-
-export default EventsManager;

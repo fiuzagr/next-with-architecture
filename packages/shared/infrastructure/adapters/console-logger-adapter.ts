@@ -1,34 +1,20 @@
 import { LoggerPort, LogLevel, LogLevelStrings } from "@packages/shared";
 
 interface LoggerSettings {
+  appName?: string;
   level: LogLevelStrings;
 }
 
 const defaultLoggerSettings = {
+  appName: "app",
   level: "warn" as LogLevelStrings,
 };
 
-class ConsoleLoggerAdapter implements LoggerPort {
-  private settings: LoggerSettings;
+export class ConsoleLoggerAdapter implements LoggerPort {
+  private readonly settings: LoggerSettings;
 
   constructor(settings: LoggerSettings = defaultLoggerSettings) {
     this.settings = Object.assign({}, defaultLoggerSettings, settings);
-  }
-
-  private isLogLevelEnabled(level: LogLevelStrings) {
-    return LogLevel[level] <= LogLevel[this.settings.level];
-  }
-
-  private log(level: LogLevelStrings, ...args: any[]) {
-    if (this.isLogLevelEnabled(level)) {
-      args.push(Date.now());
-
-      if (level in console) {
-        console[level](...args);
-      } else {
-        console.log(level, ...args);
-      }
-    }
   }
 
   debug(...args: any[]) {
@@ -46,6 +32,22 @@ class ConsoleLoggerAdapter implements LoggerPort {
   error(...args: any[]) {
     this.log("error", ...args);
   }
-}
 
-export default ConsoleLoggerAdapter;
+  private isLogLevelEnabled(level: LogLevelStrings) {
+    return LogLevel[level] <= LogLevel[this.settings.level];
+  }
+
+  private log(level: LogLevelStrings, ...args: any[]) {
+    if (this.isLogLevelEnabled(level)) {
+      const consoleArgs = [
+        level.toUpperCase(),
+        new Date().toISOString(),
+        `[${this.settings.appName}]`,
+        ...args,
+      ];
+      const consoleLevel = level in console ? level : "log";
+
+      console[consoleLevel](...consoleArgs);
+    }
+  }
+}

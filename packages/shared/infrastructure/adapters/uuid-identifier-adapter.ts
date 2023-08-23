@@ -1,7 +1,7 @@
 import { IdentifierPort } from "@packages/shared";
 import { v4 as uuidv4, validate } from "uuid";
 
-class UuidIdentifierAdapter implements IdentifierPort {
+export class UuidIdentifierAdapter implements IdentifierPort {
   generate(): string {
     return uuidv4();
   }
@@ -10,5 +10,3 @@ class UuidIdentifierAdapter implements IdentifierPort {
     return validate(id);
   }
 }
-
-export default UuidIdentifierAdapter;

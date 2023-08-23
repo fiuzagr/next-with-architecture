@@ -1,14 +1,15 @@
 import { filterLeadsUseCase } from "@/modules/customer-acquisition/main";
 import { useQuery } from "@/modules/shared";
-import { FilterDto, LeadDto } from "@packages/customer-acquisition";
+import {
+  FilterLeadsRequest,
+  FilterLeadsResponse,
+} from "@packages/customer-acquisition";
 import { useCallback } from "react";
 
-const useFilterLeads = (filter: FilterDto) => {
+export const useFilterLeads = (filter: FilterLeadsRequest) => {
   const filterCallback = useCallback(
     () => filterLeadsUseCase.execute(filter),
     [filter]
   );
-  return useQuery<string, LeadDto[]>(filterCallback);
+  return useQuery<string, FilterLeadsResponse>(filterCallback);
 };
-
-export default useFilterLeads;

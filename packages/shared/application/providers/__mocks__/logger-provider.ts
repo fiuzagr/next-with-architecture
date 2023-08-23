@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 
-const Provider = {
+export const LoggerProvider = {
   getInstance: jest.fn(() => {
     return {
       info: jest.fn(),
@@ -10,5 +10,3 @@ const Provider = {
     };
   }),
 };
-
-export default Provider;

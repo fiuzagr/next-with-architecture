@@ -1,7 +1,5 @@
 import { Customer } from "@packages/customer-acquisition/application/domain";
 
-interface CustomerRepositoryPort {
+export interface CustomerRepositoryPort {
   save(customer: Customer): Promise<void>;
 }
-
-export default CustomerRepositoryPort;

@@ -1,11 +1,9 @@
 import { createLeadUseCase } from "@/modules/customer-acquisition/main";
 import { useMutation } from "@/modules/shared";
-import { CreateLeadDto } from "@packages/customer-acquisition";
+import { CreateLeadRequest } from "@packages/customer-acquisition";
 
-const useCreateLead = () => {
-  return useMutation<CreateLeadDto, void>(
+export const useCreateLead = () => {
+  return useMutation<CreateLeadRequest, void>(
     createLeadUseCase.execute.bind(createLeadUseCase)
   );
 };
-
-export default useCreateLead;

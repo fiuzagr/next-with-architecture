@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 
-const Provider = {
+export const IdentifierProvider = {
   getInstance: jest.fn(() => {
     return {
       generate: jest.fn(() => "mocked-id"),
@@ -8,5 +8,3 @@ const Provider = {
     };
   }),
 };
-
-export default Provider;

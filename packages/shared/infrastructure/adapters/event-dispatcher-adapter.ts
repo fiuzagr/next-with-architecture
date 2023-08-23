@@ -6,8 +6,8 @@ import {
 } from "@packages/shared";
 import { Event } from "@packages/shared/application/domain";
 
-class EventDispatcherAdapter implements EventDispatcherPort {
-  private eventHandlers = new Map<string, EventHandlerPort[]>();
+export class EventDispatcherAdapter implements EventDispatcherPort {
+  private readonly eventHandlers = new Map<string, EventHandlerPort[]>();
 
   getHandlers(eventName: string) {
     return this.eventHandlers.get(eventName) ?? [];
@@ -58,5 +58,3 @@ class EventDispatcherAdapter implements EventDispatcherPort {
     });
   }
 }
-
-export default EventDispatcherAdapter;

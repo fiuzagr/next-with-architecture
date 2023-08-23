@@ -1,6 +1,5 @@
 import {
   LeadRepositoryPort,
-  UpdateLeadDto,
   UpdateLeadError,
 } from "@packages/customer-acquisition";
 import {
@@ -9,24 +8,33 @@ import {
   UseCasePort,
 } from "@packages/shared";
 
-class UpdateLeadUseCase implements UseCasePort<UpdateLeadDto, void> {
+export interface UpdateLeadRequest {
+  data: {
+    id: string;
+    fullName: string;
+    cpf: string;
+    email: string;
+  };
+}
+
+export class UpdateLeadUseCase implements UseCasePort<UpdateLeadRequest, void> {
   constructor(
-    private repository: LeadRepositoryPort,
-    private eventDispatcher: EventDispatcherPort
+    private readonly repository: LeadRepositoryPort,
+    private readonly eventDispatcher: EventDispatcherPort
   ) {}
 
-  async execute(leadDto: UpdateLeadDto) {
+  async execute(request: UpdateLeadRequest) {
     try {
-      const lead = await this.repository.find(leadDto.id);
+      const lead = await this.repository.find(request.data.id);
 
-      lead.update(leadDto);
+      lead.update(request.data);
 
       await this.repository.save(lead);
 
       this.eventDispatcher.notify([lead]);
 
       LoggerProvider.getInstance().debug(UpdateLeadUseCase.name, {
-        leadDto,
+        request,
         lead,
       });
     } catch (error) {
@@ -34,5 +42,3 @@ class UpdateLeadUseCase implements UseCasePort<UpdateLeadDto, void> {
     }
   }
 }
-
-export default UpdateLeadUseCase;

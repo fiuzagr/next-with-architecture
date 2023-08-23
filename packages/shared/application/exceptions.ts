@@ -1,5 +1,5 @@
 export abstract class GenericError extends Error {
-  public constructor(error?: string | Error, ...args: any[]) {
+  protected constructor(error?: string | Error, ...args: any[]) {
     let errorMessage: string | undefined;
 
     if (error instanceof Error) {
@@ -9,6 +9,10 @@ export abstract class GenericError extends Error {
     }
 
     super(errorMessage, ...args);
+  }
+
+  public toString() {
+    return this.message;
   }
 }
 

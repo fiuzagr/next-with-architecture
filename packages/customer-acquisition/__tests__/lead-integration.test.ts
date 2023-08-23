@@ -26,12 +26,12 @@ const createLeadUseCase = new CreateLeadUseCase(
   eventDispatcher
 );
 
-eventDispatcher.register(LeadCreatedEvent.name, eventHandler);
+eventDispatcher.register([LeadCreatedEvent.name], eventHandler);
 
 describe("Lead integration", () => {
   test("find lead", async () => {
-    const lead = await findLeadByIdUseCase.execute("1");
-    expect(lead.id).toEqual("1");
+    const response = await findLeadByIdUseCase.execute({ data: { id: "1" } });
+    expect(response.data.lead.id).toEqual("1");
   });
 
   test("create lead", async () => {
@@ -39,9 +39,11 @@ describe("Lead integration", () => {
     jest.spyOn(eventDispatcher, "notify");
 
     await createLeadUseCase.execute({
-      fullName: "John Doe",
-      cpf: "12345678900",
-      email: "test@test.com",
+      data: {
+        fullName: "John Doe",
+        cpf: "12345678900",
+        email: "test@test.com",
+      },
     });
 
     expect(leadDataSource.save).toHaveBeenCalled();

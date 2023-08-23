@@ -1,2 +1,2 @@
-export { default as LeadRepository } from "./lead-repository";
-export { default as CustomerRepository } from "./customer-repository";
+export * from "./lead-repository";
+export * from "./customer-repository";
