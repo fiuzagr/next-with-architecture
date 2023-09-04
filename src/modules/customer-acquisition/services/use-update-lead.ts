@@ -3,7 +3,7 @@ import { useMutation } from "@/modules/shared";
 import { UpdateLeadRequest } from "@packages/customer-acquisition";
 
 export const useUpdateLead = () => {
-  return useMutation<UpdateLeadRequest, void>(
+  return useMutation<UpdateLeadRequest>(
     updateLeadUseCase.execute.bind(updateLeadUseCase)
   );
 };

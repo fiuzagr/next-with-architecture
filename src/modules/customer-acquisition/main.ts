@@ -2,27 +2,24 @@ import {
   CreateCustomerByLeadEventHandlerAdapter,
   CreateCustomerUseCase,
   CreateLeadUseCase,
+  CustomerCreatedEvent,
   CustomerDTO,
   CustomerRepository,
   FakeLeadDataSource,
   FilterLeadsUseCase,
   FindLeadByIdUseCase,
   IndexedDbDataSource,
+  LeadCreatedEvent,
   LeadDTO,
   LeadRepository,
+  LeadUpdatedEvent,
   UpdateLeadUseCase,
 } from "@packages/customer-acquisition";
-import {
-  CustomerCreatedEvent,
-  LeadCreatedEvent,
-  LeadUpdatedEvent,
-} from "@packages/customer-acquisition/application/domain";
+import { IdentifierProvider, LoggerProvider } from "@packages/core";
 import {
   ConsoleLoggerAdapter,
   EventDispatcherAdapter,
-  IdentifierProvider,
   LoggerEventHandlerAdapter,
-  LoggerProvider,
   UuidIdentifierAdapter,
 } from "@packages/shared";
 import {

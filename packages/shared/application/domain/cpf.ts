@@ -1,5 +1,5 @@
-import { InvalidCpfError } from "@packages/shared";
-import { ValueObject } from "@packages/shared/application/domain/value-object";
+import { InvalidCpfError } from "@packages/core";
+import { ValueObject } from "@packages/core/application/domain/value-object";
 
 export class Cpf extends ValueObject<string> {
   constructor(value: string) {

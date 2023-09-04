@@ -3,17 +3,17 @@ import {
   FilterDto,
   LeadDTO,
 } from "@packages/customer-acquisition";
-import { LoggerProvider, UseCasePort } from "@packages/shared";
+import {
+  LoggerProvider,
+  RequestDto,
+  ResponseDto,
+  UseCasePort,
+} from "@packages/core";
 
-export interface FilterLeadsRequest {
-  data: FilterDto;
-}
-
-export interface FilterLeadsResponse {
-  data: {
-    leads: LeadDTO[];
-  };
-}
+export type FilterLeadsRequest = RequestDto<FilterDto>;
+export type FilterLeadsResponse = ResponseDto<{
+  leads: LeadDTO[];
+}>;
 
 export class FilterLeadsUseCase
   implements UseCasePort<FilterLeadsRequest, FilterLeadsResponse>

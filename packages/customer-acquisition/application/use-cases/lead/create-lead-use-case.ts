@@ -6,16 +6,15 @@ import { Lead } from "@packages/customer-acquisition/application/domain";
 import {
   EventDispatcherPort,
   LoggerProvider,
+  RequestDto,
   UseCasePort,
-} from "@packages/shared";
+} from "@packages/core";
 
-export interface CreateLeadRequest {
-  data: {
-    fullName: string;
-    cpf: string;
-    email: string;
-  };
-}
+export type CreateLeadRequest = RequestDto<{
+  fullName: string;
+  cpf: string;
+  email: string;
+}>;
 
 export class CreateLeadUseCase implements UseCasePort<CreateLeadRequest, void> {
   constructor(

@@ -3,12 +3,11 @@ import {
   LeadCreatedEvent,
   LeadUpdatedEvent,
 } from "@packages/customer-acquisition/application/domain/events";
+import { Entity, ValueObject } from "@packages/core/application/domain";
 import {
   Cpf,
   Email,
-  Entity,
   FullPersonName,
-  ValueObject,
 } from "@packages/shared/application/domain";
 
 interface LeadProps {

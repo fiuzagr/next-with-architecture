@@ -1,10 +1,5 @@
-import {
-  EventDataDto,
-  EventHandlerPort,
-  LoggerPort,
-  UseCasePort,
-} from "@packages/shared";
-import { Event } from "@packages/shared/application/domain";
+import { EventHandlerPort, LoggerPort, UseCasePort } from "@packages/core";
+import { Event } from "@packages/core/application/domain";
 import { CreateCustomerRequest } from "@packages/customer-acquisition";
 
 export class CreateCustomerByLeadEventHandlerAdapter
@@ -15,7 +10,7 @@ export class CreateCustomerByLeadEventHandlerAdapter
     private readonly logger: LoggerPort
   ) {}
 
-  handle(event: Event<EventDataDto>) {
+  async handle(event: Event) {
     const customer = {
       data: {
         ...event.data.lead,

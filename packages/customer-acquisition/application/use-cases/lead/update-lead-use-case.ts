@@ -5,17 +5,16 @@ import {
 import {
   EventDispatcherPort,
   LoggerProvider,
+  RequestDto,
   UseCasePort,
-} from "@packages/shared";
+} from "@packages/core";
 
-export interface UpdateLeadRequest {
-  data: {
-    id: string;
-    fullName: string;
-    cpf: string;
-    email: string;
-  };
-}
+export type UpdateLeadRequest = RequestDto<{
+  id: string;
+  fullName: string;
+  cpf: string;
+  email: string;
+}>;
 
 export class UpdateLeadUseCase implements UseCasePort<UpdateLeadRequest, void> {
   constructor(

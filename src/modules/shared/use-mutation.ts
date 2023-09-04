@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 type MutationHandler<Input, Output> = (input: Input) => Promise<Output>;
 
-type MutationHookResult<Input, Output> = [
+export type MutationResult<Input, Output = void> = [
   {
     error?: string;
     loading: boolean;
@@ -10,9 +10,9 @@ type MutationHookResult<Input, Output> = [
   (input: Input) => Promise<Output | void>
 ];
 
-export const useMutation = <Input, Output>(
+export const useMutation = <Input, Output = void>(
   handler: MutationHandler<Input, Output>
-): MutationHookResult<Input, Output> => {
+): MutationResult<Input, Output> => {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 

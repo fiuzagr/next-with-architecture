@@ -1,5 +1,5 @@
 import { Id } from "@packages/shared/application/domain/id";
-import { EventsManager } from "@packages/shared/application/events-manager";
+import { EventsManager } from "@packages/core/application/events-manager";
 
 export abstract class Entity<Props, JSONProps> extends EventsManager {
   private readonly _id: Id;

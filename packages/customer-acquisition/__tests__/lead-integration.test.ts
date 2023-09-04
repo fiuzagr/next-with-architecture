@@ -3,17 +3,17 @@ import {
   CreateLeadUseCase,
   FakeLeadDataSource,
   FindLeadByIdUseCase,
+  LeadCreatedEvent,
   LeadRepository,
 } from "@packages/customer-acquisition";
-import { LeadCreatedEvent } from "@packages/customer-acquisition/application/domain";
 import {
   ConsoleLoggerAdapter,
   EventDispatcherAdapter,
   LoggerEventHandlerAdapter,
 } from "@packages/shared";
 
-jest.mock("@packages/shared/application/providers/logger-provider");
-jest.mock("@packages/shared/application/providers/identifier-provider");
+jest.mock("@packages/core/application/providers/logger-provider");
+jest.mock("@packages/core/application/providers/identifier-provider");
 
 const logger = new ConsoleLoggerAdapter({ level: "debug" });
 const eventHandler = new LoggerEventHandlerAdapter(logger);

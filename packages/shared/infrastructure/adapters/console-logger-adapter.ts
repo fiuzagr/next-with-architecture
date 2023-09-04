@@ -1,4 +1,4 @@
-import { LoggerPort, LogLevel, LogLevelStrings } from "@packages/shared";
+import { LoggerPort, LogLevel, LogLevelStrings } from "@packages/core";
 
 interface LoggerSettings {
   appName?: string;

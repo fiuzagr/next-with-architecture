@@ -1,5 +1,5 @@
-import { InvalidEmailError } from "@packages/shared";
-import { ValueObject } from "@packages/shared/application/domain/value-object";
+import { InvalidEmailError } from "@packages/core";
+import { ValueObject } from "@packages/core/application/domain/value-object";
 
 export class Email extends ValueObject<string> {
   constructor(value: string) {

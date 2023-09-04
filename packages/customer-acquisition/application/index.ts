@@ -1,3 +1,4 @@
+export * from "./domain/events";
 export * from "./repositories";
 export * from "./dtos";
 export * from "./ports";

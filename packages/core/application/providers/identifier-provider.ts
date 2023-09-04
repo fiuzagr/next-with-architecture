@@ -1,4 +1,4 @@
-import { IdentifierPort } from "@packages/shared";
+import { IdentifierPort } from "@packages/core";
 import { Provider } from "./provider";
 
 export class IdentifierProvider<ValueType = string> extends Provider<

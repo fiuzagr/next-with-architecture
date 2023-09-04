@@ -1,4 +1,4 @@
-import { IdentifierPort } from "@packages/shared";
+import { IdentifierPort } from "@packages/core";
 
 const randomLastUuidPart = () => {
   const randomRange = 100000000000;

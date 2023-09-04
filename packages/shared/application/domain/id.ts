@@ -1,5 +1,5 @@
-import { IdentifierProvider, InvalidIdError } from "@packages/shared";
-import { ValueObject } from "@packages/shared/application/domain/value-object";
+import { IdentifierProvider, InvalidIdError } from "@packages/core";
+import { ValueObject } from "@packages/core/application/domain/value-object";
 
 export class Id extends ValueObject<string> {
   constructor(value: string | Id) {

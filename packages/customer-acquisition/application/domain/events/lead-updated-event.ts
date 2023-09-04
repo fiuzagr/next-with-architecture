@@ -1,4 +1,4 @@
-import { Event } from "@packages/shared/application/domain";
+import { Event } from "@packages/core/application/domain";
 import { LeadDTO } from "@packages/customer-acquisition";
 
 interface EventData {

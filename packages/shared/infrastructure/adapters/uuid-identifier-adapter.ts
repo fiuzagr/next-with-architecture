@@ -1,4 +1,4 @@
-import { IdentifierPort } from "@packages/shared";
+import { IdentifierPort } from "@packages/core";
 import { v4 as uuidv4, validate } from "uuid";
 
 export class UuidIdentifierAdapter implements IdentifierPort {

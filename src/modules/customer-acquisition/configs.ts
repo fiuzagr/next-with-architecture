@@ -1,4 +1,4 @@
-import { LogLevelStrings } from "@packages/shared";
+import { LogLevelStrings } from "@packages/core";
 
 export const isBrowser = typeof window !== "undefined";
 

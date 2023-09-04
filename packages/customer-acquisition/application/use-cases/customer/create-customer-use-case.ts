@@ -6,17 +6,16 @@ import { Customer } from "@packages/customer-acquisition/application/domain";
 import {
   EventDispatcherPort,
   LoggerProvider,
+  RequestDto,
   UseCasePort,
-} from "@packages/shared";
+} from "@packages/core";
 
-export interface CreateCustomerRequest {
-  data: {
-    fullName: string;
-    cpf: string;
-    email: string;
-    leadId: string;
-  };
-}
+export type CreateCustomerRequest = RequestDto<{
+  fullName: string;
+  cpf: string;
+  email: string;
+  leadId: string;
+}>;
 
 export class CreateCustomerUseCase
   implements UseCasePort<CreateCustomerRequest, void>

@@ -1,17 +1,18 @@
 import { DataSourcePort, LeadDTO } from "@packages/customer-acquisition";
-import { LoggerProvider, UseCasePort } from "@packages/shared";
+import {
+  LoggerProvider,
+  RequestDto,
+  ResponseDto,
+  UseCasePort,
+} from "@packages/core";
 
-export interface FindLeadByIdRequest {
-  data: {
-    id: string;
-  };
-}
+export type FindLeadByIdRequest = RequestDto<{
+  id: string;
+}>;
 
-export interface FindLeadByIdResponse {
-  data: {
-    lead: LeadDTO;
-  };
-}
+export type FindLeadByIdResponse = ResponseDto<{
+  lead: LeadDTO;
+}>;
 
 export class FindLeadByIdUseCase
   implements UseCasePort<FindLeadByIdRequest, FindLeadByIdResponse>

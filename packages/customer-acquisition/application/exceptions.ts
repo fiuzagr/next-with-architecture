@@ -1,4 +1,4 @@
-import { GenericError } from "@packages/shared";
+import { GenericError } from "@packages/core";
 
 export class CreateLeadError extends GenericError {
   public constructor(error?: string | Error, ...args: any[]) {

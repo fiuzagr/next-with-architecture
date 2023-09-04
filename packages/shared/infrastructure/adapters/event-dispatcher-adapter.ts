@@ -3,8 +3,8 @@ import {
   EventHandlerPort,
   EventsManager,
   LoggerProvider,
-} from "@packages/shared";
-import { Event } from "@packages/shared/application/domain";
+} from "@packages/core";
+import { Event } from "@packages/core/application/domain";
 
 export class EventDispatcherAdapter implements EventDispatcherPort {
   private readonly eventHandlers = new Map<string, EventHandlerPort[]>();
@@ -21,9 +21,21 @@ export class EventDispatcherAdapter implements EventDispatcherPort {
     eventsManagers.forEach((manager) => {
       manager.events.forEach((event: Event) => {
         const eventName = event.constructor.name;
-        this.eventHandlers
-          .get(eventName)
-          ?.map((handler) => handler.handle(event));
+
+        Promise.all(
+          this.getHandlers(eventName).map((handler) => handler.handle(event))
+        )
+          .then(() => {
+            manager.removeEvent(event);
+          })
+          .catch((error) => {
+            LoggerProvider.getInstance().error(
+              EventDispatcherAdapter.name,
+              "notify",
+              eventName,
+              error
+            );
+          });
 
         LoggerProvider.getInstance().debug(
           EventDispatcherAdapter.name,
@@ -32,14 +44,12 @@ export class EventDispatcherAdapter implements EventDispatcherPort {
           event
         );
       });
-
-      manager.clearEvents();
     });
   }
 
   register(eventNames: string[], eventHandler: EventHandlerPort) {
     eventNames.forEach((eventName) => {
-      const handlers = this.eventHandlers.get(eventName) ?? [];
+      const handlers = this.getHandlers(eventName);
 
       const hasSomeHandler = handlers.some(
         (handler) => handler === eventHandler

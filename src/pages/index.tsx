@@ -139,19 +139,17 @@ const CreateOrUpdateLeadView = ({
 
 export default function HomePage() {
   const [leadId, setLeadId] = useState<string | undefined>(undefined);
-  const [
-    { leads, error, loading },
-    { handleCreateOrUpdateLead, handleFilterLeads },
-  ] = useHomeController();
+  const [{ leads, error, loading }, { handleSaveLead, handleFilterLeads }] =
+    useHomeController();
 
-  const handleSubmit = useCallback(
+  const handleSaveFormLead = useCallback(
     async (data: LeadDTO) => {
-      handleCreateOrUpdateLead && (await handleCreateOrUpdateLead(data));
+      handleSaveLead && (await handleSaveLead(data));
       setLeadId(undefined);
     },
-    [handleCreateOrUpdateLead]
+    [handleSaveLead]
   );
-  const handleEdit = useCallback((id: string) => setLeadId(id), []);
+  const handleSetLeadToEdit = useCallback((id: string) => setLeadId(id), []);
 
   let foundLead;
   if (leads && leadId) {
@@ -164,7 +162,7 @@ export default function HomePage() {
     <>
       {error ? <div>{error}</div> : null}
       <CreateOrUpdateLeadView
-        onSubmit={handleSubmit}
+        onSubmit={handleSaveFormLead}
         refreshLeads={handleFilterLeads}
         lead={foundLead}
       />
@@ -172,7 +170,7 @@ export default function HomePage() {
         <ListLeadsView
           leads={leads}
           onSearch={handleFilterLeads}
-          onEditClick={handleEdit}
+          onEditClick={handleSetLeadToEdit}
         />
       ) : null}
     </>

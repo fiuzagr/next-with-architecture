@@ -1,5 +1,5 @@
-import { InvalidFullPersonNameError } from "@packages/shared";
-import { ValueObject } from "@packages/shared/application/domain/value-object";
+import { InvalidFullPersonNameError } from "@packages/core";
+import { ValueObject } from "@packages/core/application/domain/value-object";
 
 export class FullPersonName extends ValueObject<string> {
   constructor(value: string) {

@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LeadCreatedEvent } from "@packages/customer-acquisition/application/domain/events/lead-created-event";
-import { IdentifierProvider } from "@packages/shared";
+import { LeadCreatedEvent } from "@packages/customer-acquisition";
+import { IdentifierProvider } from "@packages/core";
 import { Id } from "@packages/shared/application/domain/id";
 import { Lead } from "../lead";
 
-jest.mock("@packages/shared/application/providers/identifier-provider");
+jest.mock("@packages/core/application/providers/identifier-provider");
 jest.mock("@packages/shared/application/domain/id");
 jest.mock("@packages/shared/application/domain/email");
 jest.mock("@packages/shared/application/domain/cpf");

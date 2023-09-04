@@ -1,4 +1,4 @@
-import { EventDataDto } from "@packages/shared";
+import { EventDataDto } from "@packages/core";
 
 export abstract class Event<T extends EventDataDto = EventDataDto> {
   public constructor(

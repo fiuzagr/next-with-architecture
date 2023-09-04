@@ -1,9 +1,13 @@
-import { GenericError, UnknownError } from "@packages/shared";
-import { useCallback, useEffect, useState } from "react";
+import { GenericError, UnknownError } from "@packages/core";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type QueryHandler<Output> = () => Promise<Output>;
 
-type QueryHookResult<Output> = [
+type QuerySettings = {
+  lazy?: boolean;
+};
+
+export type QueryResult<Output> = [
   {
     error?: string;
     data?: Output;
@@ -12,13 +16,15 @@ type QueryHookResult<Output> = [
   () => Promise<Output | undefined>
 ];
 
-export const useQuery = <Input, Output>(
+export const useQuery = <Output>(
   handler: QueryHandler<Output>,
-  { lazy }: { lazy?: boolean } = { lazy: false }
-): QueryHookResult<Output> => {
+  querySettings: QuerySettings = { lazy: false }
+): QueryResult<Output> => {
   const [error, setError] = useState<string>();
   const [data, setData] = useState<Output>();
   const [loading, setLoading] = useState<boolean>(true);
+  const settings = useRef<QuerySettings>(querySettings);
+  const called = useRef<boolean>(false);
 
   const query = useCallback(async (): Promise<Output | undefined> => {
     let queryData = undefined;
@@ -44,10 +50,11 @@ export const useQuery = <Input, Output>(
   }, [handler]);
 
   useEffect(() => {
-    if (!lazy) {
+    if (!settings.current.lazy && !called.current) {
+      called.current = true;
       query();
     }
-  }, [lazy, query]);
+  }, [query]);
 
   return [
     {

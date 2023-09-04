@@ -3,8 +3,8 @@ import {
   EventHandlerPort,
   LoggerPort,
   LogLevelStrings,
-} from "@packages/shared";
-import { Event } from "@packages/shared/application/domain";
+} from "@packages/core";
+import { Event } from "@packages/core/application/domain";
 
 interface Settings {
   logLevel: LogLevelStrings;
@@ -20,7 +20,7 @@ export class LoggerEventHandlerAdapter implements EventHandlerPort {
     private readonly settings: Settings = defaultSettings
   ) {}
 
-  handle(event: Event<EventDataDto>) {
+  async handle(event: Event<EventDataDto>) {
     this.logger[this.settings.logLevel](event);
   }
 }

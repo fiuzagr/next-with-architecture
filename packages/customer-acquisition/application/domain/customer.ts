@@ -1,12 +1,11 @@
 import { CustomerDTO } from "@packages/customer-acquisition";
 import { CustomerCreatedEvent } from "@packages/customer-acquisition/application/domain/events";
+import { Entity, ValueObject } from "@packages/core/application/domain";
 import {
   Cpf,
   Email,
-  Entity,
   FullPersonName,
   Id,
-  ValueObject,
 } from "@packages/shared/application/domain";
 
 interface CustomerProps {
