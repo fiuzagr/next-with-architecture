@@ -1,5 +1,12 @@
-import { InvalidFullPersonNameError } from "@packages/core";
+import { GenericError } from "@packages/core";
 import { ValueObject } from "@packages/core/application/domain/value-object";
+
+export class InvalidFullPersonNameError extends GenericError {
+  public constructor(error?: string | Error, ...args: any[]) {
+    super(error, ...args);
+    this.name = "InvalidFullPersonNameError";
+  }
+}
 
 export class FullPersonName extends ValueObject<string> {
   constructor(value: string) {
@@ -13,10 +20,17 @@ export class FullPersonName extends ValueObject<string> {
   }
 
   public static isValid(value: string) {
-    return /^[a-z]{2,}(\s[a-z]{2,})+$/i.test(value);
+    return /^\p{Letter}{2,}(\s\p{Letter}{2,})+$/iu.test(value);
   }
 
   public static sanitize(value: string) {
-    return value.replaceAll(/(^\s|\s$)/g, "").replaceAll(/\s/g, " ");
+    return value
+      .replaceAll(/(^\s|\s$)/g, "")
+      .replaceAll(/\s/g, " ")
+      .replaceAll(/[^\p{Letter}]/gu, "");
+  }
+
+  public toString() {
+    return `${this.constructor.name}(${this.value})`;
   }
 }

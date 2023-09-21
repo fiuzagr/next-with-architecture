@@ -22,12 +22,16 @@ export abstract class Entity<Props, JSONProps> extends EventsManager {
     this._props = props;
   }
 
-  toJSON(): JSONProps {
+  public toJSON(): JSONProps {
     const jsonProps = JSON.parse(JSON.stringify(this.props));
 
     return {
       id: this.id.toJSON(),
       ...jsonProps,
     };
+  }
+
+  public equals(entity: Entity<Props, JSONProps>) {
+    return this.id.equals(entity.id);
   }
 }

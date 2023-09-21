@@ -1,11 +1,13 @@
+import { MethodNotImplementedError } from "@packages/core";
+
 export abstract class ValueObject<T> {
   protected constructor(private readonly _value: T) {}
 
-  get value() {
+  public get value() {
     return this._value;
   }
 
-  static validate<ValueType>(
+  public static validate<ValueType>(
     AnyValueObject: new (_value: ValueType) => ValueObject<ValueType>,
     value: ValueType
   ): Error | undefined {
@@ -17,7 +19,17 @@ export abstract class ValueObject<T> {
     }
   }
 
-  toJSON() {
+  public static isValid(_value: any) {
+    throw new MethodNotImplementedError();
+  }
+
+  public static sanitize(_value: any) {
+    throw new MethodNotImplementedError();
+  }
+
+  public toJSON() {
     return JSON.parse(JSON.stringify(this.value));
   }
+
+  abstract toString(): string;
 }

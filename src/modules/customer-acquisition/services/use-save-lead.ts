@@ -3,8 +3,23 @@ import {
   LeadDTO,
   UpdateLeadRequest,
 } from "@packages/customer-acquisition";
-import { useCreateLead, useUpdateLead } from "@/modules/customer-acquisition";
-import { MutationResult } from "@/modules/shared";
+import { MutationResult, useMutation } from "@/modules/shared";
+import {
+  createLeadUseCase,
+  updateLeadUseCase,
+} from "@/modules/customer-acquisition/main";
+
+const useUpdateLead = () => {
+  return useMutation<UpdateLeadRequest>(
+    updateLeadUseCase.execute.bind(updateLeadUseCase)
+  );
+};
+
+const useCreateLead = () => {
+  return useMutation<CreateLeadRequest>(
+    createLeadUseCase.execute.bind(createLeadUseCase)
+  );
+};
 
 export const useSaveLead = (): MutationResult<LeadDTO> => {
   const [
